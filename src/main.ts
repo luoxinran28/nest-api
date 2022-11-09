@@ -8,7 +8,6 @@ import { AppModule } from './app.module';
 // }
 // bootstrap();
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
