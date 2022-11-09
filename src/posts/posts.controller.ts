@@ -1,42 +1,35 @@
 import { Controller, Get, Post } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('posts')
-@ApiUseTags('posts')
+@ApiTags('cats')
 export class PostsController {
   @Get()
+  @ApiOperation({ summary: '显示博客列表' })
   index() {
-    return [
-      { id: 1 },
-      { id: 1 },
-      { id: 1 },
-    ];
+    return [{ id: 1 }, { id: 1 }, { id: 1 }];
   }
-  @Get(":id")
+  @Get(':id')
   detail() {
     return [
-      { 
+      {
         id: 1,
-        title: "aaaaa"
+        title: 'aaaaa',
       },
-      { 
+      {
         id: 2,
-        title: "bbbbbb"
+        title: 'bbbbbb',
       },
-      { 
+      {
         id: 3,
-        title: "ccccccc"
+        title: 'ccccccc',
       },
     ];
   }
   @Post()
   create() {
     return {
-      success: true
+      success: true,
     };
   }
-
 }
-function ApiUseTags(arg0: string) {
-  throw new Error('Function not implemented.');
-}
-
