@@ -2,15 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { from, Observable, of } from 'rxjs';
 import { User } from 'src/user/models/user.interface';
-import { UserService } from 'src/user/service/user.service';
 const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly userService: UserService,
-    private readonly jwtService: JwtService
-  ) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   // validateUser(username: string, pw: string): Observable<any> {
   //   const user = this.userService.findOneByUsername(username);
@@ -29,10 +25,7 @@ export class AuthService {
     return from<string>(bcrypt.hash(password, 12));
   }
 
-  comparePasswords(
-    newPassword: string,
-    passwordHash: string
-  ): Observable<boolean> {
-    return of<any | boolean>(bcrypt.compare(newPassword, passwordHash));
+  comparePasswords(newPassword: string, passwordHash: string): Observable<any> {
+    return from<any | boolean>(bcrypt.compare(newPassword, passwordHash));
   }
 }
