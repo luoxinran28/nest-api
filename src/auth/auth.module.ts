@@ -2,6 +2,8 @@ import { forwardRef, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from 'src/user/user.module';
+import { JwtAuthGuard } from './guards/jwt-guard';
+import { JwtStrategy } from './guards/jwt-strategy';
 import { LocalStrategy } from './local.strategy';
 import { AuthService } from './service/auth.service';
 
@@ -17,7 +19,7 @@ import { AuthService } from './service/auth.service';
       }),
     }),
   ],
-  providers: [AuthService, LocalStrategy],
+  providers: [AuthService, LocalStrategy, JwtAuthGuard, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

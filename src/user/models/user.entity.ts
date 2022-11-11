@@ -1,3 +1,4 @@
+import { Role } from 'src/auth/enums/role.enum';
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -21,4 +22,7 @@ export class UserEntity {
   emailToLowerCase() {
     this.email = this.email.toLocaleLowerCase();
   }
+
+  @Column({ type: 'enum', enum: Role, default: Role.User })
+  role: Role;
 }
