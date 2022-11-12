@@ -18,11 +18,11 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @BeforeInsert()
-  emailToLowerCase() {
-    this.email = this.email.toLocaleLowerCase();
-  }
-
   @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;
+
+  @BeforeInsert()
+  emailToLowerCase() {
+    this.email = this.email.toLowerCase();
+  }
 }
