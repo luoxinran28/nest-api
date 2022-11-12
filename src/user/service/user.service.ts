@@ -64,6 +64,10 @@ export class UserService {
     return from(this.userRepository.update(id, user));
   }
 
+  updateRoleOfUser(id: number, user: User): Observable<any> {
+    return from(this.userRepository.update(id, user));
+  }
+
   login(user: User): Observable<string> {
     return this.validateUser(user.email, user.password).pipe(
       switchMap((user: User) => {

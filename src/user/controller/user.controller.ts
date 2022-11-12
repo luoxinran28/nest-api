@@ -1,5 +1,5 @@
+import { UserService } from 'src/user/service/user.service';
 import { catchError, map, Observable, of } from 'rxjs';
-import { UserService } from './../service/user.service';
 import {
   Body,
   Controller,
@@ -49,13 +49,27 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   deleteOne(@Param('id') id: string): Observable<User> {
     return this.userService.deleteOne(+id);
   }
 
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Put(':id')
   updateOne(@Param('id') id: string, @Body() user: User): Observable<User> {
     return this.userService.updateOne(+id, user);
+  }
+
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Put(':id/role')
+  updateRoleOfUser(
+    @Param('id') id: string,
+    @Body() user: User
+  ): Observable<User> {
+    return this.userService.updateRoleOfUser(+id, user);
   }
 }
