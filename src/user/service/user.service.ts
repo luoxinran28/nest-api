@@ -11,6 +11,7 @@ import {
   Pagination,
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
+import { Role } from 'src/auth/enums/role.enum';
 
 @Injectable()
 export class UserService {
@@ -28,7 +29,7 @@ export class UserService {
         newUser.username = user.username;
         newUser.email = user.email;
         newUser.password = passwordHash;
-        newUser.role = user.role;
+        newUser.role = user.role ? user.role : Role.User;
         return from(this.userRepository.save(newUser)).pipe(
           map((user: User) => {
             const { password, ...result } = user;
@@ -68,11 +69,15 @@ export class UserService {
     delete user.email;
     delete user.password;
     delete user.role;
-    return from(this.userRepository.update(id, user));
+    return from(this.userRepository.update(id, user)).pipe(
+      switchMap(() => this.findOne(id))
+    );
   }
 
   updateRoleOfUser(id: number, user: User): Observable<any> {
-    return from(this.userRepository.update(id, user));
+    return from(this.userRepository.update(id, user)).pipe(
+      switchMap(() => this.findOne(id))
+    );
   }
 
   login(user: User): Observable<string> {

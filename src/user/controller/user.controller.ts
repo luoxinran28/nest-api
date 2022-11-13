@@ -1,11 +1,13 @@
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { Roles } from 'src/auth/decorator/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UserService } from 'src/user/service/user.service';
-
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
 import {
   Body,
   Controller,
@@ -15,10 +17,28 @@ import {
   Post,
   Put,
   Query,
+  Req,
+  Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-
 import { User } from '../models/user.interface';
+import path = require('path');
+import { join } from 'path';
+
+export const storage = {
+  storage: diskStorage({
+    destination: './uploads/profileimages',
+    filename: (req, file, cb) => {
+      const filename: string =
+        path.parse(file.originalname).name.replace(/\s/g, '') + uuidv4();
+      const extension: string = path.parse(file.originalname).ext;
+
+      cb(null, `${filename}${extension}`);
+    },
+  }),
+};
 
 @Controller('users')
 export class UserController {
@@ -88,7 +108,7 @@ export class UserController {
     const paginationOptions = {
       page: +page,
       limit: +limit,
-      route: 'http://localhost:3010/users',
+      route: '/users',
     };
 
     if (!username) {
@@ -99,5 +119,26 @@ export class UserController {
         username
       );
     }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file', storage))
+  uploadFile(@UploadedFile() file, @Req() req): Observable<any> {
+    const { user } = req.user;
+    console.log(user);
+    return this.userService
+      .updateOne(user.id, { profileImage: file.filename, ...user })
+      .pipe(map((user: User) => ({ profileImage: user.profileImage })));
+  }
+
+  @Get('profile-image/:imagename')
+  findProfileImage(
+    @Param('imagename') imagename: string,
+    @Res() res
+  ): Observable<any> {
+    return of(
+      res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename))
+    );
   }
 }
