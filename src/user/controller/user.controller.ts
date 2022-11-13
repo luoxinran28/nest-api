@@ -1,5 +1,11 @@
-import { UserService } from 'src/user/service/user.service';
+import { Pagination } from 'nestjs-typeorm-paginate';
 import { catchError, map, Observable, of } from 'rxjs';
+import { Roles } from 'src/auth/decorator/roles.decorator';
+import { Role } from 'src/auth/enums/role.enum';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { UserService } from 'src/user/service/user.service';
+
 import {
   Body,
   Controller,
@@ -8,13 +14,11 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
+
 import { User } from '../models/user.interface';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Roles } from 'src/auth/decorator/roles.decorator';
-import { Role } from 'src/auth/enums/role.enum';
 
 @Controller('users')
 export class UserController {
@@ -29,7 +33,7 @@ export class UserController {
   }
 
   @Post('login')
-  login(@Body() user: User): Observable<Object> {
+  login(@Body() user: User): Observable<any> {
     return this.userService.login(user).pipe(
       map((jwt: string) => {
         return { access_token: jwt };
@@ -42,12 +46,12 @@ export class UserController {
     return this.userService.findOne(params.id);
   }
 
-  @Roles(Role.Admin)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Get()
-  findAll(): Observable<User[]> {
-    return this.userService.findAll();
-  }
+  // @Roles(Role.Admin)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Get()
+  // findAll(): Observable<User[]> {
+  //   return this.userService.findAll();
+  // }
 
   @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -71,5 +75,18 @@ export class UserController {
     @Body() user: User
   ): Observable<User> {
     return this.userService.updateRoleOfUser(+id, user);
+  }
+
+  @Get('')
+  index(
+    @Query('page') page = 1,
+    @Query('limit') limit = 1
+  ): Observable<Pagination<User>> {
+    limit = limit > 100 ? 100 : limit;
+    return this.userService.paginate({
+      page,
+      limit,
+      route: 'http://localhost:3010/users',
+    });
   }
 }

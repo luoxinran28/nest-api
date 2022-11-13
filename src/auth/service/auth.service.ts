@@ -1,21 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { User } from 'src/user/models/user.interface';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
-
-  // validateUser(username: string, pw: string): Observable<any> {
-  //   const user = this.userService.findOneByUsername(username);
-  //   if (user && user.password === pw) {
-  //     const { password, ...result } = user;
-  //     return result;
-  //   }
-  //   return null;
-  // }
 
   generateJWT(user: User): Observable<string> {
     return from(this.jwtService.signAsync({ user }));

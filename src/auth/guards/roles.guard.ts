@@ -3,8 +3,6 @@ import { Reflector } from '@nestjs/core';
 import { map, Observable } from 'rxjs';
 import { User } from 'src/user/models/user.interface';
 import { UserService } from 'src/user/service/user.service';
-import { ROLES_KEY } from '../decorator/roles.decorator';
-import { Role } from '../enums/role.enum';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -23,12 +21,6 @@ export class RolesGuard implements CanActivate {
 
     return this.userService.findOne(user.id).pipe(
       map((user: User) => {
-        // const hasRole = () => roles.indexOf(user.role) > -1;
-        // let hasPermission = false;
-
-        // if (hasRole()) {
-        //   hasPermission = true;
-        // }
         return user && roles.indexOf(user.role) > -1;
       })
     );
