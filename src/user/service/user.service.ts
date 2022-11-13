@@ -2,7 +2,7 @@
 import { UserEntity } from './../models/user.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { catchError, from, map, Observable, switchMap, throwError } from 'rxjs';
 import { User } from '../models/user.interface';
 import { AuthService } from 'src/auth/service/auth.service';
@@ -60,17 +60,6 @@ export class UserService {
     );
   }
 
-  paginate(options: IPaginationOptions): Observable<Pagination<User>> {
-    return from(paginate<UserEntity>(this.userRepository, options)).pipe(
-      map((usersPageable: Pagination<User>) => {
-        usersPageable.items.forEach((v) => {
-          delete v.password;
-        });
-        return usersPageable;
-      })
-    );
-  }
-
   deleteOne(id: number): Observable<any> {
     return from(this.userRepository.delete(id));
   }
@@ -119,5 +108,57 @@ export class UserService {
 
   findByEmail(email: string): Observable<User> {
     return from(this.userRepository.findOneBy({ email }));
+  }
+
+  paginate(options: IPaginationOptions): Observable<Pagination<User>> {
+    return from(paginate<User>(this.userRepository, options)).pipe(
+      map((usersPageable: Pagination<User>) => {
+        usersPageable.items.forEach((v) => {
+          delete v.password;
+        });
+        return usersPageable;
+      })
+    );
+  }
+
+  paginateFilterByUsername(
+    options: IPaginationOptions,
+    username: string
+  ): Observable<Pagination<User>> {
+    return from(
+      this.userRepository.findAndCount({
+        skip: Number(options.page) * Number(options.limit) || 0,
+        take: Number(options.limit) || 10,
+        order: { id: 'ASC' },
+        select: ['id', 'name', 'username', 'email', 'role'],
+        where: [{ username: Like(`%${username}%`) }],
+      })
+    ).pipe(
+      map(([users, totalUsers]) => {
+        const usersPageable: Pagination<User> = {
+          items: users,
+          links: {
+            first: options.route + `?limit=${options.limit}`,
+            previous: options.route + ``,
+            next:
+              options.route +
+              `?limit=${options.limit}&page=${Number(options.page) + 1}`,
+            last:
+              options.route +
+              `?limit=${options.limit}&page=${Math.ceil(
+                totalUsers / Number(options.limit)
+              )}`,
+          },
+          meta: {
+            currentPage: Number(options.page),
+            itemCount: users.length,
+            itemsPerPage: Number(options.limit),
+            totalItems: totalUsers,
+            totalPages: Math.ceil(totalUsers / Number(options.limit)),
+          },
+        };
+        return usersPageable;
+      })
+    );
   }
 }

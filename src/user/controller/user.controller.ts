@@ -77,16 +77,27 @@ export class UserController {
     return this.userService.updateRoleOfUser(+id, user);
   }
 
-  @Get('')
+  @Get()
   index(
     @Query('page') page = 1,
-    @Query('limit') limit = 1
+    @Query('limit') limit = 2,
+    @Query('username') username: string
   ): Observable<Pagination<User>> {
     limit = limit > 100 ? 100 : limit;
-    return this.userService.paginate({
-      page,
-      limit,
+
+    const paginationOptions = {
+      page: +page,
+      limit: +limit,
       route: 'http://localhost:3010/users',
-    });
+    };
+
+    if (!username) {
+      return this.userService.paginate(paginationOptions);
+    } else {
+      return this.userService.paginateFilterByUsername(
+        paginationOptions,
+        username
+      );
+    }
   }
 }
