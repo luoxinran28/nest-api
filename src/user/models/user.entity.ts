@@ -1,5 +1,12 @@
 import { Role } from 'src/auth/enums/role.enum';
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BlogEntity } from 'src/blog/model/blog.entity';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class UserEntity {
@@ -28,4 +35,7 @@ export class UserEntity {
   emailToLowerCase() {
     this.email = this.email.toLowerCase();
   }
+
+  @OneToMany(() => BlogEntity, (blogEntity) => blogEntity.author)
+  blogEntries: BlogEntity[];
 }

@@ -27,6 +27,7 @@ import { User } from '../models/user.interface';
 import path = require('path');
 import { join } from 'path';
 import { MyselfGuard } from 'src/auth/guards/myself.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 export const storage = {
   storage: diskStorage({
@@ -41,6 +42,7 @@ export const storage = {
   }),
 };
 
+@ApiTags('users')
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
