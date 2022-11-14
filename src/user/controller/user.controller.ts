@@ -1,5 +1,5 @@
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of } from 'rxjs';
 import { Roles } from 'src/auth/decorator/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
@@ -26,6 +26,7 @@ import {
 import { User } from '../models/user.interface';
 import path = require('path');
 import { join } from 'path';
+import { MyselfGuard } from 'src/auth/guards/myself.guard';
 
 export const storage = {
   storage: diskStorage({
@@ -81,7 +82,7 @@ export class UserController {
   }
 
   @Roles(Role.Admin)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, MyselfGuard)
   @Put(':id')
   updateOne(@Param('id') id: string, @Body() user: User): Observable<User> {
     return this.userService.updateOne(+id, user);
