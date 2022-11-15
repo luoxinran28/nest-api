@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('blog')
+@Entity()
 export class BlogEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -47,6 +47,6 @@ export class BlogEntity {
   @Column({ nullable: true })
   isPublished: boolean;
 
-  @ManyToOne(() => UserEntity, (user) => user.blogEntries)
+  @ManyToOne(() => UserEntity, (user) => user.blogs)
   author: UserEntity;
 }

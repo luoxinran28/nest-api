@@ -36,6 +36,6 @@ export class UserEntity {
     this.email = this.email.toLowerCase();
   }
 
-  @OneToMany(() => BlogEntity, (blogEntity) => blogEntity.author)
-  blogEntries: BlogEntity[];
+  @OneToMany(() => BlogEntity, (blog) => blog.author)
+  blogs: BlogEntity[];
 }

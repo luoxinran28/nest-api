@@ -1,4 +1,5 @@
 import { Role } from 'src/auth/enums/role.enum';
+import { Blog } from 'src/blog/model/blog.interface';
 
 export interface User {
   id?: number;
@@ -8,4 +9,5 @@ export interface User {
   password?: string;
   role: Role;
   profileImage: string;
+  blogs: Blog[];
 }
