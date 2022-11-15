@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -16,9 +17,22 @@ import { Blog } from '../model/blog.interface';
 import { BlogService } from '../service/blog.service';
 
 @ApiTags('blogs')
-@Controller('blog')
+@Controller('blogs')
 export class BlogController {
   constructor(private blogService: BlogService) {}
+
+  @Get('')
+  index(@Query('page') page = 1, @Query('limit') limit = 10) {
+    limit = limit > 100 ? 100 : limit;
+
+    const paginationOptions = {
+      limit: +limit,
+      page: +page,
+      route: '/api/blogs',
+    };
+
+    return this.blogService.paginate(paginationOptions);
+  }
 
   @Post()
   create(@Body() user: User, @Body() blog: Blog): Observable<Blog | any> {

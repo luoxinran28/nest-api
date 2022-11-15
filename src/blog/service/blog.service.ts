@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  catchError,
-  from,
-  map,
-  Observable,
-  of,
-  switchMap,
-  throwError,
-} from 'rxjs';
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
+import { from, map, Observable, of, switchMap } from 'rxjs';
 import { AuthService } from 'src/auth/service/auth.service';
 import { User } from 'src/user/models/user.interface';
 import { Repository } from 'typeorm';
@@ -37,13 +34,6 @@ export class BlogService {
         return from(this.blogRepository.save(blog));
       })
     );
-
-    // return from(this.blogRepository.save(blog)).pipe(
-    //   map((blog: Blog) => {
-    //     return blog;
-    //   }),
-    //   catchError((err) => throwError(() => err))
-    // );
   }
 
   findOne(id: number): Observable<Blog> {
@@ -64,5 +54,13 @@ export class BlogService {
 
   deleteOne(id: number): Observable<any> {
     return from(this.blogRepository.delete(id));
+  }
+
+  paginate(options: IPaginationOptions): Observable<Pagination<Blog>> {
+    return from(
+      paginate<Blog>(this.blogRepository, options, {
+        relations: ['author'],
+      })
+    ).pipe(map((blogEntries: Pagination<Blog>) => blogEntries));
   }
 }
