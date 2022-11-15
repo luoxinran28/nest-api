@@ -11,6 +11,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { catchError, map, Observable, of } from 'rxjs';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
+import { User } from 'src/user/models/user.interface';
 import { Blog } from '../model/blog.interface';
 import { BlogService } from '../service/blog.service';
 
@@ -20,8 +21,8 @@ export class BlogController {
   constructor(private blogService: BlogService) {}
 
   @Post()
-  create(@Body() blog: Blog): Observable<Blog | any> {
-    return this.blogService.create(blog).pipe(
+  create(@Body() user: User, @Body() blog: Blog): Observable<Blog | any> {
+    return this.blogService.create(user, blog).pipe(
       map((blog: Blog) => blog),
       catchError((err) => of({ error: err.message }))
     );
