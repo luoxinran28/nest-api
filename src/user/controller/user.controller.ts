@@ -43,7 +43,7 @@ export const storage = {
 };
 
 @ApiTags('users')
-@Controller('users')
+@Controller('api/users')
 export class UserController {
   constructor(private userService: UserService) {}
 
@@ -104,7 +104,7 @@ export class UserController {
     const paginationOptions = {
       page: +page,
       limit: +limit,
-      route: '/users',
+      route: '/api/users',
     };
 
     if (!username) {

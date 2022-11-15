@@ -19,7 +19,7 @@ import { BlogService } from '../service/blog.service';
 export const BLOG_ENTRIES_URL = '/api/blogs';
 
 @ApiTags('blogs')
-@Controller('blogs')
+@Controller('api/blogs')
 export class BlogController {
   constructor(private blogService: BlogService) {}
 
