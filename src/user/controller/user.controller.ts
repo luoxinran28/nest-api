@@ -43,7 +43,7 @@ export const storage = {
 };
 
 @ApiTags('users')
-@Controller('api/users')
+@Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
