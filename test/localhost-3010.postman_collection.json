@@ -1,0 +1,252 @@
+{
+	"info": {
+		"_postman_id": "74f61cdb-c5d6-4cb6-ae3e-bf86b0afcbfe",
+		"name": "localhost:3010",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7429296"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "/",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3010",
+							"host": [
+								"localhost"
+							],
+							"port": "3010"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJuYW1lIjoiQXBwbGUgTHVvIiwidXNlcm5hbWUiOiJseHIzIiwiZW1haWwiOiJhcHBsZUBzZWFyeS5jbyIsInJvbGUiOiJhZG1pbiIsInByb2ZpbGVJbWFnZSI6bnVsbH0sImlhdCI6MTY2ODM0NDU5MCwiZXhwIjoxNjY4MzU0NTkwfQ.gFFT3KM0B2hC7PAWKehtSG9L0C7WmqSX8pxLj8QjaDk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3010/v1/users?page=1&limit=2&username=lxr",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"v1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "2"
+								},
+								{
+									"key": "username",
+									"value": "lxr"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add A New User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Apple Luo 2\",\n    \"username\": \"lxr5\",\n    \"email\": \"apple2@seary.co\",\n    \"password\": \"sadf\",\n    \"role\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3010/v1/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login with Email & Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"apple@seary.co\",\n    \"password\": \"sadf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3010/v1/users/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"v1",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete A User with ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiQXBwbGUgTHVvIiwidXNlcm5hbWUiOiJseHIzIiwiZW1haWwiOiJhcHBsZUBzZWFyeS5jbyIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NjgyMjQ1NTYsImV4cCI6MTY2ODIzNDU1Nn0.OBYiheOXEkvNgD1jrm2mXiNCZSRptzE4uYKCTAhf4os",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3010/v1/users/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"v1",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update A User with ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lIjoiQXBwbGUgTHVvIiwidXNlcm5hbWUiOiJseHIzIiwiZW1haWwiOiJhcHBsZUBzZWFyeS5jbyIsInJvbGUiOiJhZG1pbiJ9LCJpYXQiOjE2NjgyMjQ1NTYsImV4cCI6MTY2ODIzNDU1Nn0.OBYiheOXEkvNgD1jrm2mXiNCZSRptzE4uYKCTAhf4os",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Apple - Sean Luo\",\n    \"username\": \"lxr3\",\n    \"email\": \"apple@seary.co\",\n    \"role\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3010/v1/users/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"v1",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload files",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJuYW1lIjoiQXBwbGUgTHVvIiwidXNlcm5hbWUiOiJseHIzIiwiZW1haWwiOiJhcHBsZUBzZWFyeS5jbyIsInJvbGUiOiJhZG1pbiIsInByb2ZpbGVJbWFnZSI6bnVsbH0sImlhdCI6MTY2ODM0NDU5MCwiZXhwIjoxNjY4MzU0NTkwfQ.gFFT3KM0B2hC7PAWKehtSG9L0C7WmqSX8pxLj8QjaDk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3010/users/upload",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"users",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "blogs",
+			"item": [
+				{
+					"name": "Get All Blogs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3010/v1/blogs",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"v1",
+								"blogs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
