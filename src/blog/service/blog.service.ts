@@ -63,4 +63,16 @@ export class BlogService {
       })
     ).pipe(map((blogEntries: Pagination<Blog>) => blogEntries));
   }
+
+  paginateByUserId(
+    options: IPaginationOptions,
+    userId: string
+  ): Observable<Pagination<Blog>> {
+    return from(
+      paginate<Blog>(this.blogRepository, options, {
+        relations: ['author'],
+        where: [{ author: { id: +userId } }],
+      })
+    ).pipe(map((blogEntries: Pagination<Blog>) => blogEntries));
+  }
 }
