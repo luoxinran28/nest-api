@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { map } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
-import { User } from 'src/user/models/user.interface';
-import { UserService } from 'src/user/service/user.service';
+import { User } from 'src/users/models/user.interface';
+import { UserService } from 'src/users/service/users.service';
 
 @Injectable()
 export class MyselfGuard implements CanActivate {

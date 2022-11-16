@@ -1,4 +1,4 @@
-import { UserEntity } from 'src/user/models/user.entity';
+import { UserEntity } from 'src/users/models/user.entity';
 import {
   BeforeUpdate,
   Column,

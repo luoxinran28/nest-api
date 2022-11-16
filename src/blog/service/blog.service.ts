@@ -7,7 +7,7 @@ import {
 } from 'nestjs-typeorm-paginate';
 import { from, map, Observable, of, switchMap } from 'rxjs';
 import { AuthService } from 'src/auth/service/auth.service';
-import { User } from 'src/user/models/user.interface';
+import { User } from 'src/users/models/user.interface';
 import { Repository } from 'typeorm';
 import { BlogEntity } from '../model/blog.entity';
 import { Blog } from '../model/blog.interface';

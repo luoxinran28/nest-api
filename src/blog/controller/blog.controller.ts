@@ -12,7 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { catchError, map, Observable, of } from 'rxjs';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
-import { User } from 'src/user/models/user.interface';
+import { User } from 'src/users/models/user.interface';
 import { Blog } from '../model/blog.interface';
 import { BlogService } from '../service/blog.service';
 
