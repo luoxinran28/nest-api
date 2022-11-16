@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -23,8 +24,10 @@ export const BLOG_ENTRIES_URL = '/api/blogs';
 export class BlogController {
   constructor(private blogService: BlogService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() user: User, @Body() blog: Blog): Observable<Blog | any> {
+  create(@Req() req, @Body() blog: Blog): Observable<Blog | any> {
+    const { user } = req.user;
     return this.blogService.create(user, blog).pipe(
       map((blog: Blog) => blog),
       catchError((err) => of({ error: err.message }))
