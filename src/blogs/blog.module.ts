@@ -10,4 +10,4 @@ import { AuthModule } from 'src/auth/auth.module';
   providers: [BlogService],
   controllers: [BlogController],
 })
-export class BlogModule {}
+export class BlogsModule {}
