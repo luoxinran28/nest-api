@@ -1,5 +1,5 @@
 import { Role } from 'src/auth/enums/role.enum';
-import { BlogEntity } from 'src/blog/model/blog.entity';
+import { BlogEntity } from 'src/blogs/model/blog.entity';
 import {
   BeforeInsert,
   Column,

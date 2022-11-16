@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 import { PostsModule } from './posts/posts.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { BlogModule } from './blog/blog.module';
+import { BlogModule } from './blogs/blog.module';
 
 @Module({
   imports: [

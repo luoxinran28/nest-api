@@ -13,9 +13,8 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { catchError, map, Observable, of } from 'rxjs';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
-import { User } from 'src/users/models/user.interface';
 import { Blog } from '../model/blog.interface';
-import { BlogService } from '../service/blog.service';
+import { BlogService } from '../service/blogs.service';
 
 export const BLOG_ENTRIES_URL = '/v1/blogs';
 
