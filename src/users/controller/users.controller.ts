@@ -76,7 +76,6 @@ export class UserController {
     return this.userService.deleteOne(+id);
   }
 
-  @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, MyselfGuard)
   @Put(':id')
   updateOne(@Param('id') id: string, @Body() user: User): Observable<User> {
@@ -104,7 +103,7 @@ export class UserController {
     const paginationOptions = {
       page: +page,
       limit: +limit,
-      route: '/api/users',
+      route: '/v1/users',
     };
 
     if (!username) {

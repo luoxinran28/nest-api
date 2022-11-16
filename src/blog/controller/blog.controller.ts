@@ -17,7 +17,7 @@ import { User } from 'src/users/models/user.interface';
 import { Blog } from '../model/blog.interface';
 import { BlogService } from '../service/blog.service';
 
-export const BLOG_ENTRIES_URL = '/api/blogs';
+export const BLOG_ENTRIES_URL = '/v1/blogs';
 
 @ApiTags('blogs')
 @Controller('blogs')
@@ -27,7 +27,7 @@ export class BlogController {
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Req() req, @Body() blog: Blog): Observable<Blog | any> {
-    const { user } = req.user;
+    const { user } = req;
     return this.blogService.create(user, blog).pipe(
       map((blog: Blog) => blog),
       catchError((err) => of({ error: err.message }))
@@ -64,11 +64,11 @@ export class BlogController {
     return this.blogService.paginate(paginationOptions);
   }
 
-  @Get('user/:user')
+  @Get('user/:userId')
   indexByUser(
     @Query('page') page = 1,
     @Query('limit') limit = 10,
-    @Param('user') userId: string
+    @Param('userId') userId: string
   ) {
     limit = limit > 100 ? 100 : limit;
 
