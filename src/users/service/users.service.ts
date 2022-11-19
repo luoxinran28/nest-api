@@ -98,8 +98,10 @@ export class UserService {
 
   validateUser(email: string, password: string): Observable<User> {
     return this.findByEmail(email).pipe(
-      switchMap((user: User) =>
-        this.authService.comparePasswords(password, user.password).pipe(
+      switchMap((user: User) => {
+        // TODO: login with password not working in docker
+        // console.log(email, password);
+        return this.authService.comparePasswords(password, user.password).pipe(
           map((match: boolean) => {
             if (match) {
               const { password, ...result } = user;
@@ -108,8 +110,8 @@ export class UserService {
               throw Error;
             }
           })
-        )
-      )
+        );
+      })
     );
   }
 
