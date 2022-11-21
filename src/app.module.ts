@@ -7,6 +7,7 @@ import { PostsModule } from './posts/posts.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { BlogsModule } from './blogs/blog.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { BlogsModule } from './blogs/blog.module';
     UsersModule,
     AuthModule,
     BlogsModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
