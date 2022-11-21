@@ -1,18 +1,14 @@
 import { UnauthorizedException } from '@nestjs/common';
 import {
-  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
-  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/service/auth.service';
-import { User } from 'src/users/models/user.interface';
-import { UserService } from 'src/users/service/users.service';
+import { UserService } from 'src/user/service/user-service/user.service';
 
 @WebSocketGateway({
   cors: {
@@ -39,16 +35,11 @@ export class ChatGateway
     // await this.joinedRoomService.deleteAll();
   }
 
-  @SubscribeMessage('message')
-  handleEvent(client: any, payload: any): string {
-    return 'hi there';
-  }
-
   async handleConnection(socket: Socket) {
     try {
-      // const decodedToken = await this.authService.verifyJwt(
-      //   socket.handshake.headers.authorization
-      // );
+      const decodedToken = await this.authService.verifyJwt(
+        socket.handshake.headers.authorization
+      );
       // const user: User = await this.userService.getOne(decodedToken.user.id);
       // if (!user) {
       //   return this.disconnect(socket);
@@ -65,8 +56,7 @@ export class ChatGateway
       //   // Only emit rooms to the specific connected client
       //   return this.server.to(socket.id).emit('rooms', rooms);
       // }
-      // console.log(decodedToken);
-      return 'Hi There';
+      return decodedToken;
     } catch {
       return this.disconnect(socket);
     }
