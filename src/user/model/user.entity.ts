@@ -1,4 +1,5 @@
 import { BlogEntity } from 'src/blogs/model/blog.entity';
+import { RoomEntity } from 'src/chat/model/room/room.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -23,8 +24,8 @@ export class UserEntity {
   @Column({ select: false })
   password: string;
 
-  // @ManyToMany(() => RoomEntity, (room) => room.users)
-  // rooms: RoomEntity[];
+  @ManyToMany(() => RoomEntity, (room) => room.users)
+  rooms: RoomEntity[];
 
   // @OneToMany(() => ConnectedUserEntity, (connection) => connection.user)
   // connections: ConnectedUserEntity[];
