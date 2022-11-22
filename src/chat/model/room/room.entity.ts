@@ -5,9 +5,11 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { JoinedRoomEntity } from '../joined-room/joined-room.entity';
 
 @Entity()
 export class RoomEntity {
@@ -23,6 +25,9 @@ export class RoomEntity {
   @ManyToMany(() => UserEntity)
   @JoinTable()
   users: UserEntity[];
+
+  @OneToMany(() => JoinedRoomEntity, (joinedRoom) => joinedRoom.room)
+  joinedUsers: JoinedRoomEntity[];
 
   @CreateDateColumn()
   created_at: Date;
