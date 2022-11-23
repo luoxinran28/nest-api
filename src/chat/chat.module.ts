@@ -9,6 +9,7 @@ import { ConnectedUserService } from './service/connected-user/connected-user.se
 import { ConnectedUserEntity } from './model/connected-user/connected-user.entity';
 import { JoinedRoomEntity } from './model/joined-room/joined-room.entity';
 import { JoinedRoomService } from './service/joined-room/joined-room.service';
+import { MessageService } from './service/message/message.service';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { JoinedRoomService } from './service/joined-room/joined-room.service';
     RoomService,
     ConnectedUserService,
     JoinedRoomService,
+    MessageService,
   ],
 })
 export class ChatModule {}
