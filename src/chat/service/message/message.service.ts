@@ -1,16 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import {
   IPaginationOptions,
   paginate,
   Pagination,
 } from 'nestjs-typeorm-paginate';
+import { MessageEntity } from 'src/chat/model/message/message.entity';
 import { Message } from 'src/chat/model/message/message.interface';
 import { Room } from 'src/chat/model/room/room.interface';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class MessageService {
-  constructor(private readonly messageRepository: Repository<Message>) {}
+  constructor(
+    @InjectRepository(MessageEntity)
+    private readonly messageRepository: Repository<Message>
+  ) {}
 
   async create(message: Message): Promise<Message> {
     return this.messageRepository.save(this.messageRepository.create(message));

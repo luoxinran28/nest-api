@@ -12,6 +12,7 @@ import { AuthService } from 'src/auth/service/auth.service';
 import { User } from 'src/user/model/user.interface';
 import { UserService } from 'src/user/service/user-service/user.service';
 import { ConnectedUser } from '../model/connected-user/connected-user.interface';
+import { Page } from '../model/page.interface';
 import { Room } from '../model/room/room.interface';
 import { ConnectedUserService } from '../service/connected-user/connected-user.service';
 import { JoinedRoomService } from '../service/joined-room/joined-room.service';
@@ -131,5 +132,23 @@ export class ChatGateway
   async onLeaveRoom(socket: Socket) {
     // remove connection from JoinedRooms
     await this.joinedRoomService.deleteBySocketId(socket.id);
+  }
+
+  @SubscribeMessage('paginateRooms')
+  async onPaginateRoom(socket: Socket, page: Page) {
+    const rooms = await this.roomService.getRoomsForUser(
+      socket.data.user.id,
+      this.handleIncomingPageRequest(page)
+    );
+    // substract page -1 to match the angular material paginator
+    rooms.meta.currentPage = rooms.meta.currentPage - 1;
+    return this.server.to(socket.id).emit('rooms', rooms);
+  }
+
+  private handleIncomingPageRequest(page: Page) {
+    page.limit = page.limit > 100 ? 100 : page.limit;
+    // add page +1 to match angular material paginator
+    page.page = page.page + 1;
+    return page;
   }
 }
