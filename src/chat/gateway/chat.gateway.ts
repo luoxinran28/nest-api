@@ -51,7 +51,7 @@ export class ChatGateway
   async handleConnection(socket: Socket) {
     try {
       const decodedToken = await this.authService.verifyJwt(
-        socket.handshake.auth.token
+        socket.handshake.headers.authorization
       );
       const user: User = await this.userService.getOne(decodedToken.user.id);
 
