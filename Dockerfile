@@ -18,7 +18,7 @@ EXPOSE 3010
 ## PRODUCTION ##
 ################
 # Build another image named production
-FROM node:18 AS production
+FROM node:18-alpine AS production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
@@ -31,7 +31,7 @@ COPY --from=development /luoxinran/src/app/ .
 # httpserver set port
 EXPOSE 3010
 # websokcet set port
-EXPOSE 3011
+EXPOSE 9229
 
 # run app
 CMD [ "node", "dist/main"]

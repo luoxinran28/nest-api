@@ -30,7 +30,7 @@ export class UserController {
     return this.userService.findAll({
       page,
       limit,
-      route: 'http://localhost:3000/api/users',
+      route: 'http://localhost:3010/v1/users',
     });
   }
 
