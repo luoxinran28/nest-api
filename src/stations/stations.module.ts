@@ -4,10 +4,11 @@ import { StationsService } from './service/stations.service';
 import { StationsController } from './controller/stations.controller';
 import { StationEntity } from './model/station.entity';
 import { StationRepository } from './repository/stations.repository';
+import { StationGateway } from './gateway/station/station.gateway';
 
 @Module({
   imports: [TypeOrmModule.forFeature([StationEntity])],
   controllers: [StationsController],
-  providers: [StationsService, StationRepository],
+  providers: [StationsService, StationRepository, StationGateway],
 })
 export class StationsModule {}
