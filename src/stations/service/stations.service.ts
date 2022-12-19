@@ -8,7 +8,7 @@ import { StationRepository } from '../repository/stations.repository';
 
 @Injectable()
 export class StationsService {
-  private _stationGateway = new StationGateway('123');
+  private _stationGateway = new StationGateway(123);
   constructor(
     @InjectRepository(StationRepository)
     private readonly stationRepository: StationRepository
@@ -31,6 +31,7 @@ export class StationsService {
   }
 
   async getStations(filterDto: GetStationsFilterDto): Promise<Station[]> {
+    this._stationGateway.connect();
     return this.stationRepository.getStations(filterDto);
   }
   async getStationById(id: number): Promise<Station> {
@@ -44,7 +45,7 @@ export class StationsService {
   }
 
   connectStationToCentralSystem(station: Station) {
-    this._stationGateway.connect();
+    // this._stationGateway.connect();
     // const newStationWebSocketClient =
     //   this.stationWebSocketService.createStationWebSocket(station);
     // if (newStationWebSocketClient) {
