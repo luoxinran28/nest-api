@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import WSClient from 'src/client/WSClient';
 import { StationGateway } from '../gateway/station/station.gateway';
 import { CreateOrUpdateStationDto } from '../model/dto/create-update-station.dto';
 import { GetStationsFilterDto } from '../model/dto/get-station-filter.dto';
@@ -9,6 +10,7 @@ import { StationRepository } from '../repository/stations.repository';
 @Injectable()
 export class StationsService {
   private _stationGateway = new StationGateway(123);
+  private _stationClient = new WSClient();
   constructor(
     @InjectRepository(StationRepository)
     private readonly stationRepository: StationRepository
@@ -32,6 +34,7 @@ export class StationsService {
 
   async getStations(filterDto: GetStationsFilterDto): Promise<Station[]> {
     this._stationGateway.connect();
+    this._stationClient.open();
     return this.stationRepository.getStations(filterDto);
   }
   async getStationById(id: number): Promise<Station> {

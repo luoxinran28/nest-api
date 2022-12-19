@@ -49,6 +49,7 @@
     "socket.io": "^4.5.3",
     "swagger-ui-express": "^4.6.0",
     "typeorm": "^0.3.10",
+    "uWebSockets.js": "uNetworking/uWebSockets.js",
     "uuid": "^9.0.0",
     "ws": "^8.11.0"
   },
