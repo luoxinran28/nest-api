@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import WSClient from 'src/client/WSClient';
+import ChargePoint from 'src/client/ChargePoint';
 import { StationGateway } from '../gateway/station/station.gateway';
 import { CreateOrUpdateStationDto } from '../model/dto/create-update-station.dto';
 import { GetStationsFilterDto } from '../model/dto/get-station-filter.dto';
@@ -10,7 +10,7 @@ import { StationRepository } from '../repository/stations.repository';
 @Injectable()
 export class StationsService {
   private _stationGateway = new StationGateway(123);
-  private _stationClient = new WSClient();
+  private _stationClient = new ChargePoint();
   constructor(
     @InjectRepository(StationRepository)
     private readonly stationRepository: StationRepository
