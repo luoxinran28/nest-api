@@ -3,13 +3,13 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 // import { StationsModule } from 'src/stations/stations.module';
 import { StationGateway } from 'src/stations/gateway/station/station.gateway';
-import ChargePoint from 'src/client/ChargePoint';
+import OcppClient from 'src/client/OcppClient';
 import { WsAdapter } from '@nestjs/platform-ws';
 
 describe('Stations Controller', () => {
   let app: INestApplication;
   let stationGateway: StationGateway;
-  let stationClient: ChargePoint;
+  let stationClient: OcppClient;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -22,7 +22,7 @@ describe('Stations Controller', () => {
 
   it(`Start the Central System and a Station`, () => {
     stationGateway = new StationGateway(123);
-    stationClient = new ChargePoint();
+    stationClient = new OcppClient();
 
     stationGateway.connect();
     stationClient.open();

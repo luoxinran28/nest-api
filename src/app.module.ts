@@ -3,7 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 import { BlogsModule } from './blogs/blog.module';
 import { ChatModule } from './chat/chat.module';
@@ -19,7 +18,6 @@ import { StationsModule } from './stations/stations.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    // PostsModule,
     UserModule,
     AuthModule,
     BlogsModule,
