@@ -11,6 +11,8 @@ import { OcppClientConnection } from 'src/server/OcppClientConnection';
 import {
   BootNotificationRequest,
   BootNotificationResponse,
+  DataTransferRequest,
+  DataTransferResponse,
 } from 'src/common/Types';
 import { OcppError } from 'src/common/OcppError';
 
@@ -81,23 +83,20 @@ export class StationsService {
           cb(response);
         }
       );
-    });
-  }
-
-  public commandChargePointById(id: string, command: string): void {
-    if (!id) {
-      console.log(
-        'Please tell me which Charge Point you are assigning command to.'
+      client.on(
+        'DataTransfer',
+        (
+          request: DataTransferRequest,
+          cb: (response: DataTransferResponse) => void
+        ) => {
+          const response: DataTransferResponse = {
+            status: 'Accepted',
+            data: `From Central Server: Start data transfer to charge point ${client.getCpId()}.`,
+          };
+          cb(response);
+        }
       );
-      return;
-    }
-    if (!this._chargingPointSimple) {
-      this.startChargePoint(id);
-    }
-    if (command === 'testcommand') {
-      this._chargingPointSimple.emit('BootNotification');
-      this._chargingPointSimple.emit('DataTransfer');
-    }
+    });
   }
 
   private startChargePoint(id: string): void {
@@ -130,20 +129,43 @@ export class StationsService {
     this._chargingPointSimple.connect('ws://localhost:3011/');
   }
 
-  // public commandChargePoint(cpId: string, command: string) {
-  //   if (!cpId) {
-  //     console.log(
-  //       'Please tell me which Charge Point you are assigning command to.'
-  //     );
-  //     return;
-  //   }
-  //   if (!this._chargingPointSimple) {
-  //     console.log('Please connect the charge point first.');
-  //     return;
-  //   }
-  //   if (command === 'testcommand') {
-  //     this._chargingPointSimple.emit('BootNotification');
-  //     this._chargingPointSimple.emit('DataTransfer');
-  //   }
-  // }
+  public async commandChargePointById(
+    id: string,
+    command: string
+  ): Promise<void> {
+    if (!id) {
+      console.log(
+        'Please tell me which Charge Point you are assigning command to.'
+      );
+      return;
+    }
+    if (!this._chargingPointSimple) {
+      // Test 1: start a charge point
+      this.startChargePoint(id);
+    }
+    if (command === 'testcommand') {
+      // Test 2: Data transfer
+      const dataTransferReq: DataTransferRequest = {
+        vendorId: 'vendor id',
+        data: `Hi. this is Charge Point ${id}`,
+      };
+      try {
+        const dataTransferResp: DataTransferResponse =
+          await this._chargingPointSimple.callRequest(
+            'DataTransfer',
+            dataTransferReq
+          );
+        if (dataTransferResp.status === 'Accepted') {
+          console.log('Getting data from central server:');
+          console.log(dataTransferResp.data);
+          // Test 3: Get configuration
+          this._chargingPointSimple.emit('GetConfiguration');
+        }
+      } catch (e) {
+        if (e instanceof Error || e instanceof OcppError) {
+          console.error(e.message);
+        }
+      }
+    }
+  }
 }
