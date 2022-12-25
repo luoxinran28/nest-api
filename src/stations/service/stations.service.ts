@@ -16,19 +16,18 @@ import { OcppError } from 'src/common/OcppError';
 
 @Injectable()
 export class StationsService {
-  // private _stationGateway = new StationGateway(123);
-  // private _stationClient = new ChargePoint();
-
+  private _chargingPointSimple: OcppClient;
   constructor(
     @InjectRepository(StationRepository)
     private readonly stationRepository: StationRepository
-  ) {}
+  ) {
+    this.startOcppServer();
+  }
 
   async create(createStationDto: CreateOrUpdateStationDto): Promise<Station> {
     const station = await this.stationRepository.createStation(
       createStationDto
     );
-    // this.connectStationToCentralSystem(station);
     return station;
   }
 
@@ -41,14 +40,9 @@ export class StationsService {
   }
 
   async getStations(filterDto: GetStationsFilterDto): Promise<Station[]> {
-    // this._stationGateway.connect();
-    // this._stationClient.open();
-
-    this.startOcppClient();
-    this.startOcppServer();
-
     return this.stationRepository.getStations(filterDto);
   }
+
   async getStationById(id: number): Promise<Station> {
     const station = await this.stationRepository.findOneStation(id);
 
@@ -59,37 +53,8 @@ export class StationsService {
     return station;
   }
 
-  startOcppClient() {
-    const chargingPointSimple = new OcppClient('CP1111');
-    chargingPointSimple.on('error', (err: Error) => {
-      console.log(err.message);
-    });
-    chargingPointSimple.on('close', () => {
-      console.log('Connection closed');
-    });
-
-    chargingPointSimple.on('connect', async () => {
-      const boot: BootNotificationRequest = {
-        chargePointVendor: 'eParking',
-        chargePointModel: 'NECU-T2',
-      };
-
-      try {
-        const bootResp: BootNotificationResponse =
-          await chargingPointSimple.callRequest('BootNotification', boot);
-        if (bootResp.status === 'Accepted') {
-          console.log('Bootnotification accepted');
-        }
-      } catch (e) {
-        if (e instanceof Error || e instanceof OcppError) {
-          console.error(e.message);
-        }
-      }
-    });
-    chargingPointSimple.connect('ws://localhost:3011/');
-  }
-
-  startOcppServer() {
+  // Start Central System Server.
+  private startOcppServer() {
     const centralSystemSimple = new OcppServer();
     centralSystemSimple.listen(3011);
     centralSystemSimple.on('connection', (client: OcppClientConnection) => {
@@ -118,4 +83,67 @@ export class StationsService {
       );
     });
   }
+
+  public commandChargePointById(id: string, command: string): void {
+    if (!id) {
+      console.log(
+        'Please tell me which Charge Point you are assigning command to.'
+      );
+      return;
+    }
+    if (!this._chargingPointSimple) {
+      this.startChargePoint(id);
+    }
+    if (command === 'testcommand') {
+      this._chargingPointSimple.emit('BootNotification');
+      this._chargingPointSimple.emit('DataTransfer');
+    }
+  }
+
+  private startChargePoint(id: string): void {
+    this._chargingPointSimple = new OcppClient(id);
+    this._chargingPointSimple.on('error', (err: Error) => {
+      console.log(err.message);
+    });
+    this._chargingPointSimple.on('close', () => {
+      console.log('Connection closed');
+    });
+
+    this._chargingPointSimple.on('connect', async () => {
+      const boot: BootNotificationRequest = {
+        chargePointVendor: 'eParking',
+        chargePointModel: 'NECU-T2',
+      };
+
+      try {
+        const bootResp: BootNotificationResponse =
+          await this._chargingPointSimple.callRequest('BootNotification', boot);
+        if (bootResp.status === 'Accepted') {
+          console.log('Bootnotification accepted');
+        }
+      } catch (e) {
+        if (e instanceof Error || e instanceof OcppError) {
+          console.error(e.message);
+        }
+      }
+    });
+    this._chargingPointSimple.connect('ws://localhost:3011/');
+  }
+
+  // public commandChargePoint(cpId: string, command: string) {
+  //   if (!cpId) {
+  //     console.log(
+  //       'Please tell me which Charge Point you are assigning command to.'
+  //     );
+  //     return;
+  //   }
+  //   if (!this._chargingPointSimple) {
+  //     console.log('Please connect the charge point first.');
+  //     return;
+  //   }
+  //   if (command === 'testcommand') {
+  //     this._chargingPointSimple.emit('BootNotification');
+  //     this._chargingPointSimple.emit('DataTransfer');
+  //   }
+  // }
 }

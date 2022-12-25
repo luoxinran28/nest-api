@@ -65,14 +65,14 @@ export class Server extends EventEmitter {
 
   private onNewConnection(socket: WebSocket, req: IncomingMessage) {
     const cpId = Server.getCpIdFromUrl(req.url);
-    if (!socket.protocol || !cpId) {
-      // From Spec: If the Central System does not agree to using one of the subprotocols offered
-      // by the client, it MUST complete the WebSocket handshake with a response without a
-      // Sec-WebSocket-Protocol header and then immediately close the WebSocket connection.
-      console.info('Closed connection due to unsupported protocol');
-      socket.close();
-      return;
-    }
+    // if (!socket.protocol || !cpId) {
+    //   // From Spec: If the Central System does not agree to using one of the subprotocols offered
+    //   // by the client, it MUST complete the WebSocket handshake with a response without a
+    //   // Sec-WebSocket-Protocol header and then immediately close the WebSocket connection.
+    //   console.info('Closed connection due to unsupported protocol');
+    //   socket.close();
+    //   return;
+    // }
 
     const client = new OcppClientConnection(cpId);
     client.setConnection(new Protocol(client, socket));

@@ -30,6 +30,24 @@ export class StationsController {
     return this.stationsService.getStations(filterDto);
   }
 
+  @Get('start-charge-point/:cpId')
+  @UsePipes(ValidationPipe)
+  commandChargePointById(
+    @Query('command') command,
+    @Param('cpId') cpId: string
+  ): void {
+    this.stationsService.commandChargePointById(cpId, command || '');
+  }
+
+  // @Get('command-charge-point/:cpId/:command')
+  // @UsePipes(ValidationPipe)
+  // commandChargePoint(
+  //   @Param('cpId') cpId: string,
+  //   @Param('command') command: string
+  // ): void {
+  //   this.stationsService.commandChargePoint(cpId, command);
+  // }
+
   @Get('/:id')
   getStationById(@Param('id', ParseIntPipe) id: number): Promise<Station> {
     return this.stationsService.getStationById(id);
